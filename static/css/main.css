@@ -1,0 +1,32 @@
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+nav {
+    background: #f4f4f4;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 0.5rem;
+}
+
+.content {
+    /* background: white; */
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.status {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    background: #333;
+    color: white;
+    border-radius: 0.5rem;
+    display: none;
+}
