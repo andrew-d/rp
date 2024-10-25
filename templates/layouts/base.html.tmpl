@@ -9,11 +9,7 @@
 <body>
     <nav>
         <h1>Offline Wiki</h1>
-        <div id="nav-links">
-            <a href="/" data-page="home">Home</a> |
-            <a href="/about" data-page="about">About</a> |
-            <a href="/help" data-page="help">Help</a> |
-        </div>
+        {{ template "_root-nav" .Path }}
     </nav>
 
     <main class="content" id="content">

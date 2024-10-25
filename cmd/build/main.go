@@ -104,22 +104,22 @@ func main() {
 		if err != nil {
 			return fmt.Errorf("error getting relative path for %s: %w", path, err)
 		}
-		dst := filepath.Join(outDir, relPath)
 
 		// Change the '.md' extension to '.html'
-		dst = dst[:len(dst)-len(filepath.Ext(dst))]
+		relPath = relPath[:len(relPath)-len(filepath.Ext(relPath))]
 		if *withExtensions {
-			dst = dst + ".html"
+			relPath = relPath + ".html"
 		}
 
 		// Ensure the destination directory exists
-		if err := os.MkdirAll(filepath.Dir(dst), 0755); err != nil {
-			return fmt.Errorf("error creating directory for %s: %w", dst, err)
+		fullDest := filepath.Join(outDir, relPath)
+		if err := os.MkdirAll(filepath.Dir(fullDest), 0755); err != nil {
+			return fmt.Errorf("error creating directory for %s: %w", fullDest, err)
 		}
 
-		log.Printf("converting %s -> %s", path, dst)
-		if err := gen.convertMarkdownFile(path, dst); err != nil {
-			renderErrs = append(renderErrs, fmt.Errorf("error converting %s to %s: %w", path, dst, err))
+		log.Printf("converting %s -> %s", path, filepath.Join(outDir, relPath))
+		if err := gen.convertMarkdownFile(outDir, relPath, path); err != nil {
+			renderErrs = append(renderErrs, fmt.Errorf("error converting %s to %s: %w", path, fullDest, err))
 			return nil
 		}
 		return nil
@@ -315,6 +315,9 @@ type renderData struct {
 	Title string
 	// Content is the main body content for the layout.
 	Content any
+	// Path is the relative path to the file being rendered, under the
+	// output directory.
+	Path string
 
 	// TODO: maybe 'Data any'?
 }
@@ -360,14 +363,15 @@ type mdGenerator struct {
 	pol   *bluemonday.Policy
 }
 
-func (g *mdGenerator) convertMarkdownFile(src, dst string) error {
+func (g *mdGenerator) convertMarkdownFile(outDir, relPath, src string) error {
 	// Read the markdown file
 	b, err := os.ReadFile(src)
 	if err != nil {
 		return err
 	}
 
-	df, err := os.Create(dst)
+	outPath := filepath.Join(outDir, relPath)
+	df, err := os.Create(outPath)
 	if err != nil {
 		return err
 	}
@@ -400,6 +404,7 @@ func (g *mdGenerator) convertMarkdownFile(src, dst string) error {
 	if err := g.tmpls.render(layout, df, renderData{
 		Title:   title,
 		Content: sanitized,
+		Path:    relPath,
 	}); err != nil {
 		return err
 	}
