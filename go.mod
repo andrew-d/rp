@@ -1,6 +1,6 @@
 module github.com/andrew-d/resiliency-project
 
-go 1.23.0
+go 1.25.0
 
 require (
 	github.com/microcosm-cc/bluemonday v1.0.27
@@ -11,6 +11,6 @@ require (
 require (
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
-	golang.org/x/net v0.36.0 // indirect
+	golang.org/x/net v0.55.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )
